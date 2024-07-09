@@ -7,7 +7,7 @@ import vuetify from './plugins/vuetify'
 import { loadFonts } from './plugins/webfontloader'
 import '@/assets/scss/styles.scss'
 
-loadFonts()
+await loadFonts()
 const app = createApp(App)
 components.forEach(component => app.component(component.name, component))
 

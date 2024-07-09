@@ -8,11 +8,12 @@
 			<span>сайт</span>
 		</h1>
 
-		<app-button
+		<AppButton
 			size="x-large"
 			class="next-btn"
-			@click="$router.push('/persons')"
-			>Дальше</app-button
+			@click="$router.push({name: 'Person'})"
 		>
+			Дальше
+		</AppButton>
 	</div>
 </template>

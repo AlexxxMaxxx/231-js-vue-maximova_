@@ -1,52 +1,31 @@
-<template>
-	<div class="products">
-		<div class="products__body">
-			<div class="products__header header">
-				<product-form :persons="getPersons" @add="add"></product-form>
-			</div>
-			<div class="products__content content">
-				<product-list
-					:products="getProducts"
-					:persons="getPersons"
-					@remove="remove"
-				></product-list>
-			</div>
-			<div class="products__footer footer">
-				<app-button
-					block
-					class="next-btn"
-					:class="{ disabled: hasError }"
-					@click="allowTransition"
-					>{{ buttonContent }}</app-button
-				>
-			</div>
-		</div>
-	</div>
-</template>
-
 <script>
 import ProductForm from '@/components/ProductForm.vue'
 import ProductList from '@/components/ProductList.vue'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
+	components: {
+		ProductForm,
+		ProductList,
+	},
+
 	data() {
 		return {
 			buttonContent: 'Получить результаты',
 			hasError: true,
 		}
 	},
-	components: {
-		ProductForm,
-		ProductList,
-	},
+
 	computed: {
-		...mapGetters({
-			getProducts: 'product/getProducts',
-			getProductsLength: 'product/getProductsLength',
-			getPersons: 'person/getPersons',
+		...mapState('person', {
+			persons: state => state.persons,
 		}),
+		
+		...mapState('product', {
+			products: state => state.products,
+		})
 	},
+
 	methods: {
 		...mapMutations({
 			addProduct: 'product/addProduct',
@@ -62,7 +41,7 @@ export default {
 		},
 
 		allowTransition() {
-			const len = this.getProductsLength
+			const len = this.products.length
 			this.hasError = true
 
 			if (len === 0) {
@@ -71,10 +50,40 @@ export default {
 				this.buttonContent = 'А что это мы на диете? Добавьте что-нибудь еще!'
 			} else {
 				this.buttonContent = 'Получить результаты'
-				this.$router.push('/results')
+				this.$router.push({ name: 'Result' })
 				this.hasError = false
 			}
-		},
-	},
+		}
+	}
 }
 </script>
+
+<template>
+	<div class="products">
+		<div class="products__body">
+			<div class="products__header header">
+				<ProductForm
+					:persons="persons" 
+					@add="add"
+				/>
+			</div>
+			<div class="products__content content">
+				<ProductList
+					:products="products"
+					:persons="persons"
+					@remove="remove"
+				/>
+			</div>
+			<div class="products__footer footer">
+				<AppButton
+					block
+					class="next-btn"
+					:class="{ disabled: hasError }"
+					@click="allowTransition"
+				>
+					{{ buttonContent }}
+				</AppButton>
+			</div>
+		</div>
+	</div>
+</template>

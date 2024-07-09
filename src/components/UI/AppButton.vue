@@ -1,11 +1,16 @@
-<template>
-	<v-btn variant="tonal" density="comfortable" rounded="lg">
-		<slot></slot>
-	</v-btn>
-</template>
-
 <script>
 export default {
-	name: 'app-button',
+	name: 'AppButton',
 }
 </script>
+
+<template>
+	<v-btn 
+		variant="tonal" 
+		density="comfortable" 
+		rounded="lg"
+		size="large"
+	>
+		<slot/>
+	</v-btn>
+</template>

@@ -1,22 +1,3 @@
-<template>
-	<form class="person-form" @submit.prevent>
-		<app-input
-			class="person-form__input input"
-			:class="{ invalid: hasError }"
-			:isLabel="false"
-			v-model.trim="name"
-			type="text"
-			label="Имя"
-		/>
-		<app-button
-			class="person-form__add-btn add-btn"
-			:class="{ disabled: hasError }"
-			@click="inputValidation"
-			>{{ buttonContent }}</app-button
-		>
-	</form>
-</template>
-
 <script>
 import { useVuelidate } from '@vuelidate/core'
 import { required, minLength } from '@vuelidate/validators'
@@ -28,14 +9,17 @@ export default {
 			required: true,
 		},
 	},
+
 	setup() {
 		return { v$: useVuelidate() }
 	},
+
 	data: () => ({
 		name: '',
 		buttonContent: 'Добавить',
 		hasError: false,
 	}),
+
 	validations() {
 		return {
 			name: {
@@ -44,9 +28,11 @@ export default {
 			},
 		}
 	},
+
 	methods: {
 		inputValidation() {
 			this.v$.$touch()
+			
 			if (!this.v$.$error) {
 				if (!this.persons.find(p => p.name === this.name)) {
 					this.hasError = false
@@ -65,6 +51,7 @@ export default {
 				}
 			}
 		},
+
 		addPerson() {
 			this.$emit('add', {
 				id: Date.now(),
@@ -72,8 +59,30 @@ export default {
 					this.name.charAt(0).toUpperCase() + this.name.toLowerCase().slice(1),
 				debts: [],
 			})
+
 			this.name = ''
 		},
+
 	},
 }
 </script>
+
+<template>
+	<form 
+		class="person-form" 
+		@submit.prevent
+	>
+		<AppInput 
+			class="person-form__input input"
+			:class="{ invalid: hasError }"
+			v-model.trim="name"
+		/>
+		<AppButton
+			class="person-form__add-btn add-btn"
+			:class="{ disabled: hasError }"
+			@click="inputValidation"
+		>
+			{{ buttonContent }}
+		</AppButton>
+	</form>
+</template>

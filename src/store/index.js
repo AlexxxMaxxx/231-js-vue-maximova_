@@ -6,5 +6,5 @@ export default createStore({
 	modules: {
 		person: personModule,
 		product: productModule,
-	},
+	}
 })

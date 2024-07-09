@@ -1,24 +1,42 @@
-$brown-color: #350303; /*#280C0C #9A2D2D*/
+// colors
+$white-color: rgb(255, 255, 255);
 $dark-brown-color: #220101;
+$grey-with-pink-color: rgb(91, 83, 83);
+$light-background-color: rgba(234, 209, 194, 0.325);
+
+$brown-color: rgba(154, 74, 74, 0.9); 
+$blue-color: rgba(70, 124, 136, 0.9);
+$blue-color-7a: rgba(70, 124, 136, 0.7);
+$yellow-color: rgba(209, 171, 96, 0.9);
+
 $light-brown-color: rgba(154, 74, 74, 0.5);
-$light-red-color: rgba(189, 51, 51, 0.5);
-$light-blue-color: rgba(70, 118, 160, 0.5);
+$light-blue-color: rgba(50, 118, 134, 0.5);
+$light-yellow-color: rgba(159, 127, 63, 0.5);
+
+$disabled-color: rgba(141, 139, 139, 0.6);
+
+
 $light-white-color: rgba(255, 255, 255, 0.5);
 $light-pink-color: rgb(249, 202, 202);
 $border-brown-color: rgba(154, 74, 74, 0.9);
-$border-red-color: rgba(189, 51, 51, 0.9);
-$border-blue-color: rgba(70, 118, 160, 0.9);
-$light-background-color: rgba(234, 209, 194, 0.325);
 
+// sizes
 $body-height: 100vh;
+$small-font-size: 0.85rem;
+$medium-font-size: 0.95rem;
+$big-font-size: 1.1rem;
+
 $indent: 5px;
-$accent-font: 'PacificoRegular';
-$small-font-size: 0.75rem;
-$medium-font-size: 1rem;
-$big-font-size: 1.2rem;
-$transition: all 0.3s;
+
 $medium-border-radius: 10px;
 $border: 2px solid $border-brown-color;
+
+$indent: 5px;
 $margin: 0px 5px 15px 0px;
 $padding: 5px 10px;
 $gap: 5px;
+
+// other
+$accent-font: 'PacificoRegular';
+$transition: all 0.3s;
+

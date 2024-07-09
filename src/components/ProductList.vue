@@ -1,39 +1,23 @@
-<template>
-	<div class="product-list">
-		<div class="product-list__header-list header-list">
-			<h2>{{ getHeaderList }}</h2>
-		</div>
-		<div class="product-list__content-list content-list">
-			<product
-				v-for="product in products"
-				:product="product"
-				:persons="persons"
-				:key="product.id"
-				@remove="$emit('remove', product)"
-			/>
-		</div>
-		<div class="product-list__footer-list footer-list">
-			<h2>Промежуточный итог: {{ getSubtotal }}</h2>
-		</div>
-	</div>
-</template>
-
 <script>
-import Product from '@/components/ProductItem.vue'
+import ProductListItem from '@/components/ProductListItem.vue'
+
 export default {
+	components: {
+		ProductListItem,
+	},
+
 	props: {
 		products: {
 			type: Array,
 			required: true,
 		},
+
 		persons: {
 			type: Array,
 			required: true,
 		},
 	},
-	components: {
-		Product,
-	},
+
 	computed: {
 		getHeaderList() {
 			const amountProducts = this.products.length
@@ -55,13 +39,38 @@ export default {
 				return 'А чего это мы голодаем? Добавьте что-нибудь!'
 			}
 		},
+
 		getSubtotal() {
 			let subtotal = 0
 			this.products.forEach(product => {
 				subtotal += product.total
 			})
 			return subtotal
-		},
-	},
+		}
+	}
 }
 </script>
+
+<template>
+	<div class="product-list">
+		<div class="product-list__header-list header-list">
+			<h2>
+				{{ getHeaderList }}
+			</h2>
+		</div>
+		<div class="product-list__content-list content-list">
+			<ProductListItem 
+				v-for="product in products" 
+				:product="product" 
+				:persons="persons" 
+				:key="product.id"
+				@remove="$emit('remove', product)" 
+			/>
+		</div>
+		<div class="product-list__footer-list footer-list">
+			<h2>
+				Промежуточный итог: {{ getSubtotal }}
+			</h2>
+		</div>
+	</div>
+</template>
