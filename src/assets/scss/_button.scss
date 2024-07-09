@@ -1,56 +1,23 @@
 @import './_variables.scss';
 
-.btn {
-	padding: $padding;
-	font-weight: 300;
-	text-transform: uppercase;
-	font-family: sans-serif;
-	font-weight: 400;
-	border-radius: 5px;
+.add-btn {
+	background-color: $blue-color;
 }
 
-.add-btn {
-	border: 2px solid $dark-brown-color;
-	font-size: 14px;
+.rmv-btn {
+	background-color: $brown-color;
+}
+
+.next-btn {
+	background-color: $yellow-color;
 }
 
 .selected {
 	color: white;
 }
 
-.rmv-btn {
-	background: $light-brown-color;
-	font-size: 14px;
-}
-
-.main > .next-btn {
-	font-size: 20px;
-	letter-spacing: 3px;
-	border: 3px solid $border-brown-color;
-	background-color: $light-brown-color;
-	box-shadow: -3px -5px 1px rgba(241, 238, 234, 0.352);
-	transition: $transition;
-}
-
-.next-btn {
-	font-size: 16px;
-	letter-spacing: 1px;
-	transition: $transition;
-	&:hover {
-		color: $brown-color;
-		border: 0px;
-		background-color: $light-brown-color;
-		box-shadow: 10px 10px 75px 10px $light-pink-color;
-	}
-}
-
 .disabled {
-	border: none;
-	background: $light-red-color;
 	&:hover {
-		color: $brown-color;
-		border: 0px;
-		background-color: $light-background-color;
-		box-shadow: none;
+		background-color: $disabled-color;
 	}
 }

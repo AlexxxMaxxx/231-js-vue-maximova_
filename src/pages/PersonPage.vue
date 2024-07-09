@@ -1,46 +1,25 @@
-<template>
-	<div class="persons">
-		<div class="persons__body">
-			<div class="persons__header header">
-				<person-form :persons="getPersons" @add="add" />
-			</div>
-			<div class="persons__content content">
-				<person-list :persons="getPersons" @remove="remove" />
-			</div>
-			<div class="persons__footer footer">
-				<app-button
-					block
-					class="next-btn"
-					:class="{ disabled: hasError }"
-					@click="allowTransition"
-					>{{ buttonContent }}</app-button
-				>
-			</div>
-		</div>
-	</div>
-</template>
-
 <script>
 import PersonList from '@/components/PersonList.vue'
 import PersonForm from '@/components/PersonForm.vue'
-import { mapGetters, mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
+	components: {
+		PersonList,
+		PersonForm,
+	},
+
 	data() {
 		return {
 			buttonContent: 'Добавить продукты',
 			hasError: true,
 		}
 	},
-	components: {
-		PersonList,
-		PersonForm,
-	},
+
 	computed: {
-		...mapGetters({
-			getPersons: 'person/getPersons',
-			getPersonsLength: 'person/getPersonsLength',
-		}),
+		...mapState('person', {
+			persons: state => state.persons
+		})
 	},
 
 	methods: {
@@ -48,11 +27,7 @@ export default {
 			addPerson: 'person/addPerson',
 			removePerson: 'person/removePerson',
 		}),
-		/* как я прочла из др. источников, обращаться к Vuex следуют в компонентах,
-		загружающих данные (контейнерах). В нашем случае, контейнерами можно считать странички,
-		а в компонентах по типу Form/List/Item лучше использовать props и emit,
-		что может избавить от проблем, возникающих при их повторном использовании.
-		Если я ошибаюсь, буду благодарна за feedback :)  */
+
 		add(newPerson) {
 			this.addPerson(newPerson)
 		},
@@ -62,20 +37,49 @@ export default {
 		},
 
 		allowTransition() {
-			const len = this.getPersonsLength
+			const len = this.persons.length
 			this.hasError = true
 
 			if (len === 0) {
 				this.buttonContent = 'Нет тела, нет дела! Добавьте кого-нибудь!'
 			} else if (len === 1) {
 				this.buttonContent =
-					'Кушать в одиночестве не хорошо :( Добавьте кого-нибудь еще!'
+					'Добавьте кого-нибудь еще!'
 			} else {
 				this.buttonContent = 'Добавить продукты'
-				this.$router.push('/products')
+				this.$router.push({ name: 'Product' })
 				this.hasError = false
 			}
 		},
 	},
 }
 </script>
+
+<template>
+	<div class="persons">
+		<div class="persons__body">
+			<div class="persons__header header">
+				<PersonForm 
+					:persons="persons" 
+					@add="add" 
+				/>
+			</div>
+			<div class="persons__content content">
+				<PersonList
+					:persons="persons" 
+					@remove="remove" 
+				/>
+			</div>
+			<div class="persons__footer footer">
+				<AppButton
+					block
+					class="next-btn"
+					:class="{ disabled: hasError }"
+					@click="allowTransition"
+				>
+					{{ buttonContent }}
+				</AppButton>
+			</div>
+		</div>
+	</div>
+</template>

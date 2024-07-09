@@ -1,5 +1,6 @@
 @import './_variables.scss';
 @import './button';
+@import './mixins';
 @import './input';
 
 * {
@@ -15,7 +16,8 @@
 body {
 	font-size: $medium-font-size;
 	font-family: sans-serif;
-	color: $dark-brown-color;
+	color: $white-color;
+
 	background: linear-gradient(
 			$light-background-color 100%,
 			$light-background-color 100%
@@ -26,16 +28,25 @@ body {
 	background-size: cover;
 	background-position: center;
 }
+
 .persons,
 .products,
 .results {
-	width: 50%;
+	width: 80%;
 	min-height: 400px;
+
+	@include breakpoint(lg) {
+		width: 50%;
+	}
+
 	margin: 0 auto;
+
 	border: 2px solid $light-white-color;
 	border-radius: 20px;
+
 	background-color: transparent;
 	backdrop-filter: blur(15px);
+
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
@@ -45,11 +56,13 @@ body {
 		padding: $indent 10px 0px;
 		flex-shrink: 1;
 	}
+
 	&__content {
 		padding: 10px 10px 0px;
 		flex-shrink: 2;
 		min-height: calc(100vh - 65vh);
 	}
+
 	&__footer {
 		padding: 10px;
 		flex-shrink: 1;
@@ -59,24 +72,27 @@ body {
 
 .products__header {
 	height: 30vh;
+	margin-bottom: 25px;
+}
+.products__content {
+	padding-top: 20px;
 }
 
 .header-list {
 	margin-bottom: 12px;
-	font-family: $accent-font !important;
 }
+
 .footer-list {
 	margin-top: 6px;
-	font-family: $accent-font !important;
 }
+
 .results__header {
 	text-align: center;
-	font-family: $accent-font !important;
 }
 
 .name {
 	font-family: sans-serif;
-	font-weight: 600;
+	font-weight: 700;
 	font-size: $big-font-size;
 	text-align: center;
 }
@@ -84,21 +100,26 @@ body {
 .content-list {
 	width: 100%;
 	height: 300px;
+
 	overflow-y: scroll;
 	background-color: transparent;
+
 	&::-webkit-scrollbar {
 		width: 10px;
 		background-color: transparent;
+
 		&-thumb {
 			border-radius: $medium-border-radius;
 			background-color: $border-brown-color;
 		}
+
 		&-track {
 			-webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
 			border-radius: $medium-border-radius;
 			background-color: transparent;
 		}
 	}
+
 	& > * {
 		border: $border;
 		border-radius: $medium-border-radius;
@@ -108,21 +129,35 @@ body {
 
 .main {
 	height: $body-height;
+
 	display: flex;
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
 	gap: 30px;
+
 	& .glow {
 		color: $dark-brown-color;
-		font-size: 48px;
-		letter-spacing: 3px;
+
+		font-size: 24px;
+		letter-spacing: 1px;
+		word-break: normal;
+
+		@include breakpoint(lg) {
+			font-size: 48px;
+			letter-spacing: 3px;
+		}
+
 		font-family: $accent-font;
+
 		& span {
 			transition: $transition;
+
 			&:hover {
-				text-shadow: 0 0 10px $light-pink-color, 0 0 30px $light-pink-color,
-					0 0 80px $light-pink-color, 0 0 160px $light-pink-color;
+				text-shadow: 0 0 10px $light-pink-color, 
+										 0 0 30px $light-pink-color,
+										 0 0 80px $light-pink-color, 
+										 0 0 160px $light-pink-color;
 				color: $light-brown-color;
 			}
 		}
@@ -134,6 +169,7 @@ body {
 	flex-direction: column;
 	height: 100%;
 	gap: 10px;
+
 	&__fields {
 		padding: $indent;
 		display: flex;
@@ -142,25 +178,36 @@ body {
 		height: 100%;
 		gap: $gap;
 	}
+
 	&__list-input {
 		width: 33%;
 		display: flex;
 		flex-direction: column;
 		gap: $gap;
 	}
+
 	&__title {
 		margin-bottom: 0.25rem;
-		font-size: $small-font-size;
-		color: $brown-color;
+		font-size: $medium-font-size;
 	}
+
 	&__select {
-		background: transparent;
 		padding: $padding;
-		border: 2px solid $dark-brown-color;
-		color: $dark-brown-color;
+		background:  $blue-color-7a;
+		color: $white-color;
 		border-radius: 0.25rem;
 		font-size: $small-font-size;
+
+		&:focus {
+			color: $white-color;
+			border-color: $blue-color;
+			outline: 0;
+			box-shadow: 0px 0px 0px 0.01rem $blue-color,
+									0px 0px 10px 0.01rem $white-color,
+									0px 0px 20px 0.01rem $blue-color;
+		}
 	}
+
 	&__checkbox {
 		display: flex;
 		flex-direction: column;
@@ -178,9 +225,15 @@ body {
 			position: absolute;
 			width: 16px;
 			height: 16px;
-			border: 1px solid $dark-brown-color;
+			border: 1px solid $white-color;
 			border-radius: 3px;
 			margin-left: -20px;
+			&:hover {
+			outline: 0;
+			box-shadow: 0px 0px 0px 0.01rem $white-color,
+									0px 0px 10px 0.01rem $white-color,
+									0px 0px 20px 0.01rem $white-color;
+		}
 		}
 	}
 }
@@ -189,7 +242,7 @@ body {
 	content: '';
 	width: 8px;
 	height: 8px;
-	background-color: $dark-brown-color;
+	background-color: $white-color;
 	border-radius: 3px;
 	position: absolute;
 	top: 50%;
@@ -202,6 +255,7 @@ body {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+
 	&__header {
 		display: flex;
 		flex-direction: row;
@@ -209,22 +263,26 @@ body {
 		align-items: center;
 		padding: 0px $indent;
 	}
+
 	&__content {
 		display: flex;
 		justify-content: flex-start;
 		padding: $indent;
 		flex-wrap: wrap;
 		gap: 10px;
+
 		& > div {
 			border-radius: $medium-border-radius;
 			padding: $padding;
 			width: 40%;
 			flex-grow: 2;
 			border: 1px solid $light-white-color;
+
 			& > span {
 				font-weight: 900;
 			}
 		}
+
 		&__checkbox-field {
 			flex-grow: 2;
 			order: 2;
@@ -259,6 +317,7 @@ body {
 	display: flex;
 	flex-direction: column;
 	gap: $gap;
+	
 	&__item {
 		margin: $margin;
 		border: $border;

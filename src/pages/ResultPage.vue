@@ -1,121 +1,123 @@
+<script>
+import TheWhoWhomList from '@/components/TheWhoWhomList.vue'
+import TheWhomWhoList from '@/components/TheWhomWhoList.vue'
+import { mapState, mapMutations } from 'vuex'
+
+export default {
+	components: {
+		TheWhoWhomList,
+		TheWhomWhoList,
+	},
+
+	data: () => ({
+		whoWhomList: true,
+	}),
+
+	computed: {
+		...mapState('person', {
+			persons: state => state.persons,
+			whomWho: state => state.whomWho,
+		}),
+
+		...mapState('product', {
+			products: state => state.products,
+		})
+	},
+
+	created() {
+		this.getDebts()
+		this.checkDebts()
+		this.getWhoWhom()
+	},
+
+	methods: {
+		...mapMutations({
+			checkDebts: 'person/checkDebts',
+			getWhoWhom: 'person/getWhoWhom',
+			clearStatePerson: 'person/clearState',
+			clearStateProduct: 'product/clearState'
+		}),
+
+		getDebts() {
+			this.products.forEach(product => {
+				const chosenPeople = product.chosenPeople
+				const pricePerson = (product.total / chosenPeople.length).toFixed(2)
+
+				chosenPeople.forEach(chosenPerson => {
+					const person = this.persons.find(p => p.id === chosenPerson.id)
+					const payer = product.payer.id
+
+					if (payer !== person.id) {
+						const debt = person.debts.find(item => item.id == payer)
+						if (debt) {
+							debt.amount = (parseFloat(debt.amount) + parseFloat(pricePerson)).toFixed(2)
+						}
+						else {
+							person.debts.push({ id: payer, amount: pricePerson })
+						}
+					}
+
+				})
+			})
+		},
+
+		restart() {
+			this.clearStatePerson()
+			this.clearStateProduct()
+			this.$router.push({ name: 'Main' })
+		}
+	}
+}
+</script>
+
 <template>
 	<div class="results">
 		<div class="results__body">
 			<div class="results__header header">
-				<h1>Результаты</h1>
+				<h1>
+					Результаты
+				</h1>
 			</div>
 			<div class="results__content content">
-				<v-btn-toggle
-					class="d-flex .align-sm-end justify-end flex-row pa-6"
-					rounded="1"
-					color="white"
+				<v-btn-toggle 
+					class="d-flex .align-sm-end justify-end flex-row pa-6" 
+					rounded="1" 
+					color="white" 
 					group
 				>
-					<app-button
-						@click="whoWhomlist = true"
-						:class="{ selected: whoWhomlist }"
+					<AppButton 
+						@click="whoWhomList = true" 
+						:class="{ selected: whoWhomList }"
 					>
 						Кто-кому
-					</app-button>
+					</AppButton>
 
-					<app-button
-						@click="whoWhomlist = false"
-						:class="{ selected: !whoWhomlist }"
+					<AppButton 
+						@click="whoWhomList = false" 
+						:class="{ selected: !whoWhomList }"
 					>
 						Кому-кто
-					</app-button>
+					</AppButton>
 				</v-btn-toggle>
 
-				<WhoWhomList v-if="whoWhomlist" :persons="getPersons" />
-				<WhomWhoList v-else :persons="getPersons" :whomWho="whomWho" />
+				<TheWhoWhomList 
+					v-if="whoWhomList" 
+					:persons="persons" 
+				/>
+				<TheWhomWhoList 
+					v-else :persons="persons" 
+					:whomWho="whomWho" 
+				/>
 			</div>
 			<div class="results__footer footer">
-				<app-button block class="next-btn" @click="$router.push('/')"
-					>Заново</app-button
+				<AppButton 
+					block 
+					class="next-btn" 
+					@click="restart"
 				>
+					Заново
+				</AppButton>
 			</div>
 		</div>
 	</div>
 </template>
-
-<script>
-import WhoWhomList from '@/components/WhoWhomList.vue'
-import WhomWhoList from '@/components/WhomWhoList.vue'
-import { mapGetters } from 'vuex'
-export default {
-	data: () => ({
-		whomWho: [],
-		whoWhomlist: true,
-	}),
-	components: {
-		WhoWhomList,
-		WhomWhoList,
-	},
-	created() {
-		this.getDebts()
-	},
-	computed: {
-		...mapGetters({
-			getProducts: 'product/getProducts',
-			getPersons: 'person/getPersons',
-		}),
-	},
-	methods: {
-		getDebts() {
-			this.getProducts.forEach(product => {
-				const chosenPeople = product.chosenPeople
-				const pricePerson = product.total / chosenPeople.length
-				chosenPeople.forEach(chosenPerson => {
-					const person = this.getPersons.find(p => p.id === chosenPerson.id)
-					const payer = product.payer.id
-					if (payer !== person.id)
-						person.debts.push({ id: payer, amount: pricePerson })
-				})
-			})
-			this.checkDebts()
-			this.getWhoWhom()
-		},
-		checkDebts() {
-			this.getPersons.forEach(person => {
-				person.debts.forEach((debt, ind) => {
-					const debtPerson = this.getPersons.find(p => p.id === debt.id)
-					const index = debtPerson.debts.findIndex(d => d.id === person.id)
-					if (index !== -1) {
-						const diff =
-							person.debts[ind].amount - debtPerson.debts[index].amount
-						if (diff < 0) {
-							person.debts.splice(ind, 1)
-							debtPerson.debts[index].amount = -diff
-						} else if (diff > 0) {
-							debtPerson.debts.splice(index, 1)
-							person.debts[ind].amount = diff
-						} else {
-							person.debts.splice(ind, 1)
-							debtPerson.debts.splice(index, 1)
-						}
-					}
-				})
-			})
-		},
-		getWhoWhom() {
-			this.getPersons.forEach(curPerson => {
-				const len = this.whomWho.push({ whom: curPerson.id, who: [] })
-				this.getPersons.forEach(person => {
-					if (person.id !== curPerson.id) {
-						const index = person.debts.findIndex(d => d.id === curPerson.id)
-						if (index !== -1) {
-							this.whomWho[len - 1].who.push({
-								id: person.id,
-								amount: person.debts[index].amount,
-							})
-						}
-					}
-				})
-			})
-			this.whomWho.forEach(ww => {
-				console.log(ww)
-			})
-		},
-	},
-}
-</script>
